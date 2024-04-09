@@ -9,8 +9,10 @@ import (
 )
 
 var (
-	client *mongo.Client
-	Users  *mongo.Collection
+	client  *mongo.Client
+	Users   *mongo.Collection
+	Resumes *mongo.Collection
+	About   *mongo.Collection
 )
 
 func Connect(uri, database string) error {
@@ -23,6 +25,8 @@ func Connect(uri, database string) error {
 	client = localClient
 
 	Users = client.Database(database).Collection("users")
+	Resumes = client.Database(database).Collection("resumes")
+	About = client.Database(database).Collection("about")
 
 	err = localClient.Database(database).RunCommand(context.TODO(), bson.D{{Key: "ping", Value: 1}}).Err()
 	return err
