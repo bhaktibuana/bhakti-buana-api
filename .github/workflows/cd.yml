@@ -1,0 +1,75 @@
+name: cd
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+      - dev
+  pull_request:
+    branches:
+      - main
+      - staging
+      - dev
+
+jobs:
+  cd:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Dev Deployment
+        if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/dev') || (github.event_name == 'pull_request' && github.base_ref == 'dev') }}
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          port: 22
+          script: |
+            cd ~/app/bhakti-buana/bhakti-buana-api-dev
+            git pull origin dev
+            rm -f .env.dev
+            echo "DOCKER_ENVIRONMENT=true" > .env.dev
+            echo "PORT=${{ secrets.DEV_PORT }}" >> .env.dev
+            echo "GIN_MODE=release" >> .env.dev
+            echo "BASE_URL=${{ secrets.DEV_BASE_URL }}" >> .env.dev
+            echo "CLIENT_URL=${{ secrets.DEV_CLIENT_URL }}" >> .env.dev
+            echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env.dev
+            echo "DB_CONNECTION=${{ secrets.DB_CONNECTION }}" >> .env.dev
+            echo "DB_DSN=${{ secrets.DEV_DB_DSN }}" >> .env.dev
+            echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env.dev
+            echo "SUPER_ADMIN_PASSWORD=${{ secrets.DEV_SUPER_ADMIN_PASSWORD }}" >> .env.dev
+            docker-compose -f docker-compose.dev.yml build --no-cache
+            docker-compose -f docker-compose.dev.yml up -d --force-recreate
+
+      - name: Prod Deployment
+        if: ${{ (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging')) || (github.event_name == 'pull_request' && (github.base_ref == 'main' || github.base_ref == 'staging')) }}
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          port: 22
+          script: |
+            cd ~/app/bhakti-buana/bhakti-buana-api
+            git pull origin main
+            rm -f .env.prod
+            echo "DOCKER_ENVIRONMENT=true" > .env.prod
+            echo "PORT=${{ secrets.PROD_PORT }}" >> .env.prod
+            echo "GIN_MODE=release" >> .env.prod
+            echo "BASE_URL=${{ secrets.PROD_BASE_URL }}" >> .env.prod
+            echo "CLIENT_URL=${{ secrets.PROD_CLIENT_URL }}" >> .env.prod
+            echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env.prod
+            echo "DB_CONNECTION=${{ secrets.DB_CONNECTION }}" >> .env.prod
+            echo "DB_DSN=${{ secrets.PROD_DB_DSN }}" >> .env.prod
+            echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env.prod
+            echo "SUPER_ADMIN_PASSWORD=${{ secrets.PROD_SUPER_ADMIN_PASSWORD }}" >> .env.prod
+            docker-compose -f docker-compose.prod.yml build --no-cache
+            docker-compose -f docker-compose.prod.yml up -d --force-recreate
