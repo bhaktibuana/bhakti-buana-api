@@ -10,6 +10,8 @@ import (
 func Auth(router *gin.RouterGroup) {
 	basePath := "/auth"
 	publicRoute := routersTemplate.NewPublicRoute(basePath, router)
+	privateRoute := routersTemplate.NewPrivateRoute(basePath, router)
 
 	publicRoute.POST("/login", authController.Login)
+	privateRoute.GET("/me", authController.Me)
 }

@@ -10,6 +10,7 @@ const (
 	WRONG_MAIL_PASS       string = "wrong_mail_pass"
 	UNVERIFIED_MAIL       string = "unverified_mail"
 	LOGIN_SUCCESS         string = "login_success"
+	INVALID_USER          string = "invalid_user"
 )
 
 var Languages = LanguageMap{
@@ -21,6 +22,7 @@ var Languages = LanguageMap{
 		WRONG_MAIL_PASS:       "Wrong email or password.",
 		UNVERIFIED_MAIL:       "The email has not been verified yet.",
 		LOGIN_SUCCESS:         "Login success.",
+		INVALID_USER:          "Invalid user.",
 	},
 	"id": {
 		INTERNAL_SERVER_ERROR: "Terjadi kesalahan sistem.",
@@ -30,5 +32,6 @@ var Languages = LanguageMap{
 		WRONG_MAIL_PASS:       "Email atau kata sandi salah.",
 		UNVERIFIED_MAIL:       "Email belum terverifikasi.",
 		LOGIN_SUCCESS:         "Berhasil masuk.",
+		INVALID_USER:          "Pengguna tidak valid.",
 	},
 }
