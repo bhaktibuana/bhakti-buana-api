@@ -29,3 +29,17 @@ func Login(context *gin.Context) {
 
 	helpers.HttpResponse(constants.LOGIN_SUCCESS, http.StatusOK, context, authResult.Login(user))
 }
+
+// Me Controller
+/*
+ * @param context *gin.Context
+ * @returns
+ */
+func Me(context *gin.Context) {
+	user := authService.Me(context)
+	if user == nil {
+		return
+	}
+
+	helpers.HttpResponse(constants.REQUEST_SUCCESS, http.StatusOK, context, authResult.Me(user))
+}
