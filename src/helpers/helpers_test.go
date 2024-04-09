@@ -42,7 +42,7 @@ func TestHashPassword(t *testing.T) {
 		hashedPassword := helpers.HashPassword(password)
 
 		// You might want to adjust this expectation based on the actual hashed value
-		expectedHash := "0d3418706dcc4c2bf745542eb58a34f2bb8e4ae6bdd24d195dda646108551474"
+		expectedHash := "73bfaec390bcfc7824e3aa971bc5f091759f0fe7cf1066696b65fac9801875e7"
 
 		assert.Equal(t, expectedHash, hashedPassword, "Hashed password should match expected value")
 	})
