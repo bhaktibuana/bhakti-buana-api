@@ -4,6 +4,7 @@ import (
 	"bhakti-buana-api/src/database"
 	"bhakti-buana-api/src/routers"
 	"fmt"
+	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -39,6 +40,8 @@ func Middlewares(app *gin.Engine) {
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 	}))
+
+	app.StaticFS("/public", http.Dir("./public"))
 }
 
 func Routes(app *gin.Engine) {

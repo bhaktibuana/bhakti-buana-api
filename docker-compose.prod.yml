@@ -13,7 +13,13 @@ services:
       - .env.prod
     networks:
       - bhakti_buana_api_network
+    volumes:
+     - public:/app/public
 
 networks:
   bhakti_buana_api_network:
     name: bhakti_buana_api_network
+
+volumes:
+  public:
+    driver: local

@@ -11,6 +11,8 @@ const (
 	UNVERIFIED_MAIL       string = "unverified_mail"
 	LOGIN_SUCCESS         string = "login_success"
 	INVALID_USER          string = "invalid_user"
+	FILE_LIMIT_5MB        string = "file_limit_5mb"
+	FILE_ACCEPT_PDF       string = "file_accept_pdf"
 )
 
 var Languages = LanguageMap{
@@ -23,6 +25,8 @@ var Languages = LanguageMap{
 		UNVERIFIED_MAIL:       "The email has not been verified yet.",
 		LOGIN_SUCCESS:         "Login success.",
 		INVALID_USER:          "Invalid user.",
+		FILE_LIMIT_5MB:        "File too large (Max 5 MB).",
+		FILE_ACCEPT_PDF:       "File type must be .pdf.",
 	},
 	"id": {
 		INTERNAL_SERVER_ERROR: "Terjadi kesalahan sistem.",
@@ -33,5 +37,7 @@ var Languages = LanguageMap{
 		UNVERIFIED_MAIL:       "Email belum terverifikasi.",
 		LOGIN_SUCCESS:         "Berhasil masuk.",
 		INVALID_USER:          "Pengguna tidak valid.",
+		FILE_LIMIT_5MB:        "File terlalu besar (Max 5 MB).",
+		FILE_ACCEPT_PDF:       "Tipe file harus .pdf.",
 	},
 }
