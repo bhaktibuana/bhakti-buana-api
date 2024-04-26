@@ -14,8 +14,14 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
+
+type S_IndexServiceResult struct {
+	Data       []models.Resumes
+	Pagination helpers.S_Pagination
+}
 
 // Resume Store Service
 /*
@@ -57,11 +63,6 @@ func Store(context *gin.Context, request *resumeRequest.S_StoreRequest) *models.
 	return &resume
 }
 
-type S_IndexServiceResult struct {
-	Data       []models.Resumes
-	Pagination helpers.S_Pagination
-}
-
 // Resume Index Service
 /*
  * @param context *gin.Context
@@ -86,4 +87,51 @@ func Index(context *gin.Context, request *resumeRequest.S_IndexRequest) *S_Index
 	}
 
 	return &result
+}
+
+// Resume UpdateStatus Service
+/*
+ * @param context *gin.Context
+ * @param request *resumeRequest.S_UpdateStatusRequest
+ * @returns *models.Resumes
+ */
+func UpdateStatus(context *gin.Context, request *resumeRequest.S_UpdateStatusRequest) *models.Resumes {
+	var resume models.Resumes
+
+	_id, _ := primitive.ObjectIDFromHex(request.ID)
+	filter := bson.M{"_id": _id}
+
+	payload := bson.M{
+		"$set": bson.M{
+			"status":     request.Status,
+			"updated_at": time.Now(),
+		},
+	}
+
+	if request.Status == models.RESUME_STATUS_ACTIVE {
+		filterMany := bson.M{
+			"deleted_at": bson.M{"$eq": nil},
+		}
+
+		payloadMany := bson.M{
+			"$set": bson.M{
+				"status":     models.RESUME_STATUS_INACTIVE,
+				"updated_at": time.Now(),
+			},
+		}
+
+		if _, err := database.Resumes.UpdateMany(context, filterMany, payloadMany); err != nil {
+			helpers.HttpResponse(constants.INTERNAL_SERVER_ERROR, http.StatusInternalServerError, context, err.Error())
+			return nil
+		}
+	}
+
+	if _, err := database.Resumes.UpdateOne(context, filter, payload); err != nil {
+		helpers.HttpResponse(constants.INTERNAL_SERVER_ERROR, http.StatusInternalServerError, context, err.Error())
+		return nil
+	}
+
+	resume.ID = _id
+
+	return &resume
 }

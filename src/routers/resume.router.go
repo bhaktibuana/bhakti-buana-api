@@ -13,4 +13,5 @@ func Resume(router *gin.RouterGroup) {
 
 	privateRoute.POST("/upload", resumeController.Store)
 	privateRoute.GET("/", resumeController.Index)
+	privateRoute.PUT("/:id/status", resumeController.UpdateStatus)
 }

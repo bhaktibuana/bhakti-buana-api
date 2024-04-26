@@ -48,3 +48,22 @@ func Index(context *gin.Context) {
 
 	helpers.HttpResponsePaginate(constants.REQUEST_SUCCESS, http.StatusOK, context, resumeResult.Index(resumes.Data), resumes.Pagination)
 }
+
+// Resume UpdateStatus Controller
+/*
+ * @param context *gin.Context
+ * @returns
+ */
+func UpdateStatus(context *gin.Context) {
+	request := resumeRequest.UpdateStatus(context)
+	if request == nil {
+		return
+	}
+
+	resume := resumeService.UpdateStatus(context, request)
+	if resume == nil {
+		return
+	}
+
+	helpers.HttpResponse(constants.REQUEST_SUCCESS, http.StatusOK, context, resumeResult.UpdateStatus(resume))
+}
