@@ -16,6 +16,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type S_IndexServiceResult struct {
@@ -126,12 +127,50 @@ func UpdateStatus(context *gin.Context, request *resumeRequest.S_UpdateStatusReq
 		}
 	}
 
-	if _, err := database.Resumes.UpdateOne(context, filter, payload); err != nil {
+	result, err := database.Resumes.UpdateOne(context, filter, payload)
+	if err != nil {
 		helpers.HttpResponse(constants.INTERNAL_SERVER_ERROR, http.StatusInternalServerError, context, err.Error())
 		return nil
 	}
 
-	resume.ID = _id
+	if result.ModifiedCount == 0 {
+		helpers.HttpResponse(constants.ID_NOT_FOUND, http.StatusNotFound, context, nil)
+		return nil
+	}
+
+	if err := database.Resumes.FindOne(context, filter).Decode(&resume); err != nil {
+		switch err {
+		case mongo.ErrNoDocuments:
+			helpers.HttpResponse(constants.DATA_NOT_FOUND, http.StatusNotFound, context, nil)
+			return nil
+		default:
+			helpers.HttpResponse(constants.INTERNAL_SERVER_ERROR, http.StatusInternalServerError, context, err.Error())
+			return nil
+		}
+	}
+
+	var aboutPayload primitive.M
+
+	aboutPayload = bson.M{
+		"$set": bson.M{
+			"resume":     models.S_AboutResume{},
+			"updated_at": time.Now(),
+		},
+	}
+
+	if request.Status == models.RESUME_STATUS_ACTIVE {
+		aboutPayload = bson.M{
+			"$set": bson.M{
+				"resume": models.S_AboutResume{
+					ID:  resume.ID,
+					URL: resume.URL,
+				},
+				"updated_at": time.Now(),
+			},
+		}
+	}
+
+	database.About.UpdateMany(context, bson.M{}, aboutPayload)
 
 	return &resume
 }
