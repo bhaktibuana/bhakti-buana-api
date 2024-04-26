@@ -15,9 +15,9 @@ type S_StoreResult struct {
 	CreatedAt time.Time          `json:"created_at"`
 }
 
-// Store Request
+// Resume Store Result
 /*
- * @param user *models.Resumes
+ * @param resume *models.Resumes
  * @returns S_StoreResult
  */
 func Store(resume *models.Resumes) S_StoreResult {

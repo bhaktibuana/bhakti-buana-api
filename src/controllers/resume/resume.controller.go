@@ -27,5 +27,24 @@ func Store(context *gin.Context) {
 		return
 	}
 
-	helpers.HttpResponse(constants.REQUEST_SUCCESS, http.StatusOK, context, resumeResult.Store(resume))
+	helpers.HttpResponse(constants.REQUEST_SUCCESS, http.StatusCreated, context, resumeResult.Store(resume))
+}
+
+// Resume Index Controller
+/*
+ * @param context *gin.Context
+ * @returns
+ */
+func Index(context *gin.Context) {
+	request := resumeRequest.Index(context)
+	if request == nil {
+		return
+	}
+
+	resumes := resumeService.Index(context, request)
+	if resumes == nil {
+		return
+	}
+
+	helpers.HttpResponsePaginate(constants.REQUEST_SUCCESS, http.StatusOK, context, resumeResult.Index(resumes.Data), resumes.Pagination)
 }

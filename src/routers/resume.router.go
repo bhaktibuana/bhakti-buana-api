@@ -12,4 +12,5 @@ func Resume(router *gin.RouterGroup) {
 	privateRoute := routersTemplate.NewPrivateRoute(basePath, router)
 
 	privateRoute.POST("/upload", resumeController.Store)
+	privateRoute.GET("/", resumeController.Index)
 }

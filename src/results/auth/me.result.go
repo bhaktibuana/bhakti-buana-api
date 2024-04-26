@@ -14,7 +14,7 @@ type S_MeResult struct {
 	Status      string             `json:"status"`
 }
 
-// Me Request
+// Auth Me Result
 /*
  * @param user *models.Users
  * @returns S_MeResult

@@ -13,6 +13,7 @@ const (
 	INVALID_USER          string = "invalid_user"
 	FILE_LIMIT_5MB        string = "file_limit_5mb"
 	FILE_ACCEPT_PDF       string = "file_accept_pdf"
+	INVALID_SORT          string = "invalid_sort"
 )
 
 var Languages = LanguageMap{
@@ -27,6 +28,7 @@ var Languages = LanguageMap{
 		INVALID_USER:          "Invalid user.",
 		FILE_LIMIT_5MB:        "File too large (Max 5 MB).",
 		FILE_ACCEPT_PDF:       "File type must be .pdf.",
+		INVALID_SORT:          "Sort must be \"acs\" or \"desc\"",
 	},
 	"id": {
 		INTERNAL_SERVER_ERROR: "Terjadi kesalahan sistem.",
@@ -39,5 +41,6 @@ var Languages = LanguageMap{
 		INVALID_USER:          "Pengguna tidak valid.",
 		FILE_LIMIT_5MB:        "File terlalu besar (Max 5 MB).",
 		FILE_ACCEPT_PDF:       "Tipe file harus .pdf.",
+		INVALID_SORT:          "Sort harus \"acs\" atau \"desc\"",
 	},
 }

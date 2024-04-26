@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -54,4 +55,35 @@ func Store(context *gin.Context, request *resumeRequest.S_StoreRequest) *models.
 	resume.ID = result.InsertedID.(primitive.ObjectID)
 
 	return &resume
+}
+
+type S_IndexServiceResult struct {
+	Data       []models.Resumes
+	Pagination helpers.S_Pagination
+}
+
+// Resume Index Service
+/*
+ * @param context *gin.Context
+ * @param request *resumeRequest.S_IndexRequest
+ * @returns *S_IndexServiceResult
+ */
+func Index(context *gin.Context, request *resumeRequest.S_IndexRequest) *S_IndexServiceResult {
+	var result S_IndexServiceResult
+
+	paginateResult := helpers.Paginate(context, request.S_PaginationRequest, database.Resumes, reflect.TypeOf(models.Resumes{}))
+
+	resumes := make([]models.Resumes, 0)
+	for _, item := range paginateResult.Data {
+		if resume, ok := item.(models.Resumes); ok {
+			resumes = append(resumes, resume)
+		}
+	}
+
+	result = S_IndexServiceResult{
+		Data:       resumes,
+		Pagination: paginateResult.Pagination,
+	}
+
+	return &result
 }
