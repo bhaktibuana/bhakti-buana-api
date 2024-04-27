@@ -40,6 +40,7 @@ func Store(context *gin.Context, request *resumeRequest.S_StoreRequest) *models.
 
 	if err := context.SaveUploadedFile(request.File, dir+newFileName); err != nil {
 		helpers.HttpResponse(constants.INTERNAL_SERVER_ERROR, http.StatusInternalServerError, context, err.Error())
+		return nil
 	}
 
 	parsedUrl, _ := url.Parse(configs.AppConfig().BASE_URL + "/public/resumes/" + newFileName)

@@ -29,3 +29,22 @@ func Update(context *gin.Context) {
 
 	helpers.HttpResponse(constants.REQUEST_SUCCESS, http.StatusOK, context, aboutResult.Update(about))
 }
+
+// About UpdatePhoto Controller
+/*
+ * @param context *gin.Context
+ * @returns
+ */
+func UpdatePhoto(context *gin.Context) {
+	request := aboutRequest.UpdatePhoto(context)
+	if request == nil {
+		return
+	}
+
+	about := aboutService.UpdatePhoto(context, request)
+	if about == nil {
+		return
+	}
+
+	helpers.HttpResponse(constants.REQUEST_SUCCESS, http.StatusOK, context, aboutResult.UpdatePhoto(about))
+}

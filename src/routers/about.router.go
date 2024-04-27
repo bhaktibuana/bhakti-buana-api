@@ -12,4 +12,5 @@ func About(router *gin.RouterGroup) {
 	privateRoute := routersTemplate.NewPrivateRoute(basePath, router)
 
 	privateRoute.PUT("/:id", aboutController.Update)
+	privateRoute.PUT("/:id/photo", aboutController.UpdatePhoto)
 }
