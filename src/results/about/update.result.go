@@ -12,11 +12,11 @@ type S_UpdateResult struct {
 
 // About Update Result
 /*
- * @param resume *models.About
+ * @param about *models.About
  * @returns S_UpdateResult
  */
-func Update(resume *models.About) S_UpdateResult {
+func Update(about *models.About) S_UpdateResult {
 	return S_UpdateResult{
-		ID: resume.ID,
+		ID: about.ID,
 	}
 }

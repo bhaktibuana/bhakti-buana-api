@@ -18,6 +18,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // About Update Service
@@ -105,6 +106,42 @@ func UpdatePhoto(context *gin.Context, request *aboutRequest.S_UpdatePhotoReques
 	}
 
 	if _, err := database.About.UpdateOne(context, filter, payload); err != nil {
+		helpers.HttpResponse(constants.INTERNAL_SERVER_ERROR, http.StatusInternalServerError, context, err.Error())
+		return nil
+	}
+
+	return &about
+}
+
+// About Show Service
+/*
+ * @param context *gin.Context
+ * @returns *models.About
+ */
+func Show(context *gin.Context) *models.About {
+	var about models.About
+
+	filter := bson.M{
+		"deleted_at": bson.M{"$eq": nil},
+	}
+
+	findOptions := options.Find().SetLimit(1)
+
+	cursor, err := database.About.Find(context, filter, findOptions)
+	if err != nil {
+		helpers.HttpResponse(constants.INTERNAL_SERVER_ERROR, http.StatusInternalServerError, context, err.Error())
+		return nil
+	}
+	defer cursor.Close(context)
+
+	for cursor.Next(context) {
+		if err := cursor.Decode(&about); err != nil {
+			helpers.HttpResponse(constants.INTERNAL_SERVER_ERROR, http.StatusInternalServerError, context, err.Error())
+			return nil
+		}
+	}
+
+	if err := cursor.Err(); err != nil {
 		helpers.HttpResponse(constants.INTERNAL_SERVER_ERROR, http.StatusInternalServerError, context, err.Error())
 		return nil
 	}

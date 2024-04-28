@@ -48,3 +48,17 @@ func UpdatePhoto(context *gin.Context) {
 
 	helpers.HttpResponse(constants.REQUEST_SUCCESS, http.StatusOK, context, aboutResult.UpdatePhoto(about))
 }
+
+// About Show Controller
+/*
+ * @param context *gin.Context
+ * @returns
+ */
+func Show(context *gin.Context) {
+	about := aboutService.Show(context)
+	if about == nil {
+		return
+	}
+
+	helpers.HttpResponse(constants.REQUEST_SUCCESS, http.StatusOK, context, aboutResult.Show(about))
+}
