@@ -9,5 +9,7 @@ func ApiRouter(router *gin.Engine) {
 	apiGroup := router.Group(basePath)
 	{
 		Auth(apiGroup)
+		Resume(apiGroup)
+		About(apiGroup)
 	}
 }

@@ -1,5 +1,10 @@
 package constants
 
+import (
+	"bhakti-buana-api/src/models"
+	"fmt"
+)
+
 type LanguageMap map[string]map[string]string
 
 const (
@@ -11,6 +16,13 @@ const (
 	UNVERIFIED_MAIL       string = "unverified_mail"
 	LOGIN_SUCCESS         string = "login_success"
 	INVALID_USER          string = "invalid_user"
+	FILE_LIMIT_5MB        string = "file_limit_5mb"
+	FILE_ACCEPT_PDF       string = "file_accept_pdf"
+	INVALID_SORT          string = "invalid_sort"
+	INVALID_RESUME_STATUS string = "invalid_resume_status"
+	ID_NOT_FOUND          string = "id_not_found"
+	FILE_LIMIT_2MB        string = "file_limit_2mb"
+	FILE_ACCEPT_IMAGE     string = "file_accept_image"
 )
 
 var Languages = LanguageMap{
@@ -23,6 +35,13 @@ var Languages = LanguageMap{
 		UNVERIFIED_MAIL:       "The email has not been verified yet.",
 		LOGIN_SUCCESS:         "Login success.",
 		INVALID_USER:          "Invalid user.",
+		FILE_LIMIT_5MB:        "File too large (Max 5 MB).",
+		FILE_ACCEPT_PDF:       "File type must be pdf.",
+		INVALID_SORT:          "Sort must be \"acs\" or \"desc\".",
+		INVALID_RESUME_STATUS: fmt.Sprintf("Resume status must be \"%s\" or \"%s\".", models.RESUME_STATUS_ACTIVE, models.RESUME_STATUS_INACTIVE),
+		ID_NOT_FOUND:          "ID not found.",
+		FILE_LIMIT_2MB:        "File too large (Max 2 MB).",
+		FILE_ACCEPT_IMAGE:     "File type must be jpeg/jpg/png.",
 	},
 	"id": {
 		INTERNAL_SERVER_ERROR: "Terjadi kesalahan sistem.",
@@ -33,5 +52,12 @@ var Languages = LanguageMap{
 		UNVERIFIED_MAIL:       "Email belum terverifikasi.",
 		LOGIN_SUCCESS:         "Berhasil masuk.",
 		INVALID_USER:          "Pengguna tidak valid.",
+		FILE_LIMIT_5MB:        "File terlalu besar (Max 5 MB).",
+		FILE_ACCEPT_PDF:       "Tipe file harus pdf.",
+		INVALID_SORT:          "Sort harus \"acs\" atau \"desc\".",
+		INVALID_RESUME_STATUS: fmt.Sprintf("Status Resume harus \"%s\" atau \"%s\".", models.RESUME_STATUS_ACTIVE, models.RESUME_STATUS_INACTIVE),
+		ID_NOT_FOUND:          "ID tidak ditemukan.",
+		FILE_LIMIT_2MB:        "File terlalu besar (Max 2 MB).",
+		FILE_ACCEPT_IMAGE:     "Tipe file harus jpeg/jpg/png.",
 	},
 }

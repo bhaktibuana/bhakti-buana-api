@@ -13,7 +13,7 @@ type S_LoginRequest struct {
 	Encrypted bool   `json:"encrypted"`
 }
 
-// Login Request
+// Auth Login Request
 /*
  * @param context *gin.Context
  * @returns *S_LoginRequest
