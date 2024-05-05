@@ -90,10 +90,7 @@ func UpdatePhoto(context *gin.Context, request *aboutRequest.S_UpdatePhotoReques
 	oldParts := strings.Split(about.Photo, "/")
 	oldFileName := oldParts[len(oldParts)-1]
 	if about.Photo != "" {
-		if err := os.Remove(dir + oldFileName); err != nil {
-			helpers.HttpResponse(constants.INTERNAL_SERVER_ERROR, http.StatusInternalServerError, context, err.Error())
-			return nil
-		}
+		os.Remove(dir + oldFileName)
 	}
 
 	parsedUrl, _ := url.Parse(configs.AppConfig().BASE_URL + "/public/about/" + newFileName)
