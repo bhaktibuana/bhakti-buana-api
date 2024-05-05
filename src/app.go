@@ -1,7 +1,6 @@
 package app
 
 import (
-	"bhakti-buana-api/src/configs"
 	"bhakti-buana-api/src/database"
 	"bhakti-buana-api/src/routers"
 	"fmt"
@@ -34,22 +33,12 @@ func Middlewares(app *gin.Engine) {
 		context.Next()
 	})
 
-	if configs.AppConfig().GIN_MODE == "release" {
-		app.Use(cors.New(cors.Config{
-			AllowOrigins:     []string{configs.ClientConfig().CLIENT_URL},
-			AllowCredentials: true,
-			AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
-			AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		}))
-	} else {
-		app.Use(cors.New(cors.Config{
-			AllowAllOrigins:  true,
-			AllowCredentials: true,
-			AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
-			AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		}))
-	}
-
+	app.Use(cors.New(cors.Config{
+		AllowAllOrigins:  true,
+		AllowCredentials: true,
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+	}))
 }
 
 func Routes(app *gin.Engine) {
