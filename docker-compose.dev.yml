@@ -14,12 +14,12 @@ services:
     networks:
       - bhakti_buana_api_dev_network
     volumes:
-     - public:/app/public
+      - bhakti_buana_api_dev_public:/app/public
 
 networks:
   bhakti_buana_api_dev_network:
     name: bhakti_buana_api_dev_network
 
 volumes:
-  public:
+  bhakti_buana_api_dev_public:
     driver: local

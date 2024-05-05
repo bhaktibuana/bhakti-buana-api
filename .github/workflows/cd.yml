@@ -44,8 +44,8 @@ jobs:
             echo "DB_DSN=${{ secrets.DEV_DB_DSN }}" >> .env.dev
             echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env.dev
             echo "SUPER_ADMIN_PASSWORD=${{ secrets.DEV_SUPER_ADMIN_PASSWORD }}" >> .env.dev
-            docker-compose -f docker-compose.dev.yml build --no-cache
-            docker-compose -f docker-compose.dev.yml up -d --force-recreate
+            docker-compose -f docker-compose.dev.yml build --no-cache && docker-compose -f docker-compose.dev.yml up -d --force-recreate
+            docker system prune -a -f
 
       - name: Prod Deployment
         if: ${{ (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging')) || (github.event_name == 'pull_request' && (github.base_ref == 'main' || github.base_ref == 'staging')) }}
@@ -71,5 +71,5 @@ jobs:
             echo "DB_DSN=${{ secrets.PROD_DB_DSN }}" >> .env.prod
             echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env.prod
             echo "SUPER_ADMIN_PASSWORD=${{ secrets.PROD_SUPER_ADMIN_PASSWORD }}" >> .env.prod
-            docker-compose -f docker-compose.prod.yml build --no-cache
-            docker-compose -f docker-compose.prod.yml up -d --force-recreate
+            docker-compose -f docker-compose.prod.yml build --no-cache && docker-compose -f docker-compose.prod.yml up -d --force-recreate
+            docker system prune -a -f

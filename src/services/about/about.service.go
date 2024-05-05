@@ -66,7 +66,12 @@ func UpdatePhoto(context *gin.Context, request *aboutRequest.S_UpdatePhotoReques
 	_id, _ := primitive.ObjectIDFromHex(request.ID)
 	filter := bson.M{"_id": _id}
 
-	dir := "./public/about/"
+	var dir string
+	if configs.AppConfig().GIN_MODE == "release" {
+		dir = "../public/about/"
+	} else {
+		dir = "./public/about/"
+	}
 	helpers.CheckDir(dir)
 
 	newFileName := fmt.Sprintf("%v-%s", time.Now().Unix(), request.Photo.Filename)
