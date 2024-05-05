@@ -1,6 +1,7 @@
 package app
 
 import (
+	"bhakti-buana-api/src/configs"
 	"bhakti-buana-api/src/database"
 	"bhakti-buana-api/src/routers"
 	"fmt"
@@ -35,10 +36,11 @@ func Middlewares(app *gin.Engine) {
 	})
 
 	app.Use(cors.New(cors.Config{
-		AllowAllOrigins:  true,
+		// AllowAllOrigins:  true,
 		AllowCredentials: true,
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowOrigins:     []string{configs.ClientConfig().CLIENT_URL},
 	}))
 
 	app.StaticFS("/public", http.Dir("./public"))
