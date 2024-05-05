@@ -5,7 +5,6 @@ import (
 	"bhakti-buana-api/src/database"
 	"bhakti-buana-api/src/routers"
 	"fmt"
-	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -35,15 +34,22 @@ func Middlewares(app *gin.Engine) {
 		context.Next()
 	})
 
-	app.Use(cors.New(cors.Config{
-		// AllowAllOrigins:  true,
-		AllowCredentials: true,
-		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowOrigins:     []string{configs.ClientConfig().CLIENT_URL},
-	}))
+	if configs.AppConfig().GIN_MODE == "release" {
+		app.Use(cors.New(cors.Config{
+			AllowOrigins:     []string{configs.ClientConfig().CLIENT_URL},
+			AllowCredentials: true,
+			AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+			AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		}))
+	} else {
+		app.Use(cors.New(cors.Config{
+			AllowAllOrigins:  true,
+			AllowCredentials: true,
+			AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+			AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		}))
+	}
 
-	app.StaticFS("/public", http.Dir("./public"))
 }
 
 func Routes(app *gin.Engine) {
