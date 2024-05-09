@@ -1,6 +1,7 @@
 package app
 
 import (
+	"bhakti-buana-api/src/configs"
 	"bhakti-buana-api/src/database"
 	"bhakti-buana-api/src/routers"
 	"fmt"
@@ -41,7 +42,12 @@ func Middlewares(app *gin.Engine) {
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 	}))
 
-	app.StaticFS("/public", http.Dir("./public"))
+	if configs.AppConfig().GIN_MODE == "release" {
+		app.StaticFS("/public", http.Dir("../public"))
+	} else {
+		app.StaticFS("/public", http.Dir("./public"))
+	}
+
 }
 
 func Routes(app *gin.Engine) {

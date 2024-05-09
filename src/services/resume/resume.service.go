@@ -33,7 +33,12 @@ type S_IndexServiceResult struct {
 func Store(context *gin.Context, request *resumeRequest.S_StoreRequest) *models.Resumes {
 	var resume models.Resumes
 
-	dir := "./public/resumes/"
+	var dir string
+	if configs.AppConfig().GIN_MODE == "release" {
+		dir = "../public/resumes/"
+	} else {
+		dir = "./public/resumes/"
+	}
 	helpers.CheckDir(dir)
 
 	newFileName := fmt.Sprintf("%v-%s", time.Now().Unix(), request.File.Filename)
