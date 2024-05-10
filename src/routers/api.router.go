@@ -11,5 +11,6 @@ func ApiRouter(router *gin.Engine) {
 		Auth(apiGroup)
 		Resume(apiGroup)
 		About(apiGroup)
+		Skill(apiGroup)
 	}
 }
